@@ -4,11 +4,6 @@ import com.eam.biblioteca.core.Biblioteca;
 
 import java.util.Scanner;
 
-/**
- * Punto de entrada y menú principal por consola.
- * ARCHIVO COMPARTIDO: cada quien agrega su propio submenú en un
- * método separado para minimizar conflictos de merge.
- */
 public class Main {
 
     private static Biblioteca biblioteca = new Biblioteca();
@@ -21,7 +16,7 @@ public class Main {
             opcion = leerOpcion();
             switch (opcion) {
                 case 1 -> mostrarMenuLibros();    // Persona 1
-                case 2 -> mostrarMenuClientes();  // Persona 2
+                case 2 -> mostrarMenuClientes();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción inválida.");
             }
@@ -44,12 +39,12 @@ public class Main {
         }
     }
 
-    // ---------- TODO (Persona 1 - Inventario) ----------
+    // Inventario
     private static void mostrarMenuLibros() {
         // TODO: submenú con "registrar libro" y "listar libros disponibles"
     }
 
-    // ---------- TODO (Persona 2 - Clientes/Préstamos) ----------
+    // Clientes
     private static void mostrarMenuClientes() {
         // TODO: submenú con registrar cliente, prestar libro, devolver libro
     }

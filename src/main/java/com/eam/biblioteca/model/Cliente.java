@@ -1,9 +1,5 @@
 package com.eam.biblioteca.model;
 
-/**
- * Representa a un cliente registrado en la biblioteca.
- * Responsable: Persona 2 (Clientes/Préstamos).
- */
 public class Cliente {
 
     private String documento;

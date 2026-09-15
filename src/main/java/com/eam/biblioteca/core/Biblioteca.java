@@ -6,27 +6,17 @@ import com.eam.biblioteca.model.Libro;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Clase central que centraliza la gestión del inventario de libros
- * y las operaciones de préstamo/devolución.
- *
- * ARCHIVO COMPARTIDO: ambos integrantes trabajan aquí. Coordínense
- * antes de modificarlo para evitar conflictos de merge (idealmente
- * cada uno implementa sus métodos en commits separados).
- */
 public class Biblioteca {
 
     private List<Libro> libros = new ArrayList<>();
     private List<Cliente> clientes = new ArrayList<>();
 
-    // ---------- Persona 1 (Inventario) ----------
-
-    /** TODO: agregar un libro nuevo a la lista de libros. */
+    // Agregar un libro nuevo a la lista de libros.
     public void registrarLibro(Libro libro) {
         // TODO: implementar
     }
 
-    /** TODO: retornar los libros que estén en estado DISPONIBLE. */
+    // Retornar los libros que estén en estado DISPONIBLE.
     public List<Libro> listarLibrosDisponibles() {
         // TODO: implementar
         return null;
