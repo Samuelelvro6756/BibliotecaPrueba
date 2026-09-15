@@ -31,7 +31,7 @@ public class Cliente {
      * TODO (Persona 2): marcar que el cliente recibió un libro en préstamo.
      */
     public void marcarPrestamo() {
-        // TODO: implementar
+        this.tienePrestamoActivo=true;
     }
 
     /**
