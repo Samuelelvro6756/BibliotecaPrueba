@@ -2,7 +2,7 @@ package com.eam.biblioteca.core;
 
 import com.eam.biblioteca.model.Cliente;
 import com.eam.biblioteca.model.Libro;
-
+import com.eam.biblioteca.model.EstadoLibro;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +11,30 @@ public class Biblioteca {
     private List<Libro> libros = new ArrayList<>();
     private List<Cliente> clientes = new ArrayList<>();
 
-    // Agregar un libro nuevo a la lista de libros.
     public void registrarLibro(Libro libro) {
-        // TODO: implementar
+        if (buscarLibroPorId(libro.getId()) != null) {
+            System.out.println("Ya existe un libro registrado con el id " + libro.getId());
+            return;
+        }
+        libros.add(libro);
     }
 
-    // Retornar los libros que estén en estado DISPONIBLE.
     public List<Libro> listarLibrosDisponibles() {
-        // TODO: implementar
+        List<Libro> disponibles = new ArrayList<>();
+        for (Libro libro : libros) {
+            if (libro.getEstado() == EstadoLibro.DISPONIBLE) {
+                disponibles.add(libro);
+            }
+        }
+        return disponibles;
+    }
+    
+    private Libro buscarLibroPorId(String id) {
+        for (Libro libro : libros) {
+            if (libro.getId().equals(id)) {
+                return libro;
+            }
+        }
         return null;
     }
 
