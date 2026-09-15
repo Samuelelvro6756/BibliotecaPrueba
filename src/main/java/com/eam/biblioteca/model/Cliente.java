@@ -39,7 +39,7 @@ public class Cliente {
      * (queda libre para pedir otro).
      */
     public void marcarDevolucion() {
-        // TODO: implementar
+        this.tienePrestamoActivo=false;
     }
 
     /**
