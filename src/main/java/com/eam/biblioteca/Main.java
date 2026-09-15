@@ -1,8 +1,9 @@
 package com.eam.biblioteca;
 
 import com.eam.biblioteca.core.Biblioteca;
-
+import com.eam.biblioteca.model.*;
 import java.util.Scanner;
+import java.util.List;
 
 public class Main {
 
@@ -41,7 +42,58 @@ public class Main {
 
     // Inventario
     private static void mostrarMenuLibros() {
-        // TODO: submenú con "registrar libro" y "listar libros disponibles"
+        int opcion;
+        do {
+            System.out.println("\n--- Gestión de libros ---");
+            System.out.println("1. Registrar libro");
+            System.out.println("2. Listar libros disponibles");
+            System.out.println("0. Volver");
+            System.out.print("Elige una opción: ");
+            opcion = leerOpcion();
+            switch (opcion) {
+                case 1 -> registrarLibroDesdeConsola();
+                case 2 -> listarLibrosDesdeConsola();
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
+    }
+
+    private static void registrarLibroDesdeConsola() {
+        try {
+            System.out.print("ID del libro: ");
+            String id = scanner.nextLine().trim();
+            System.out.print("Título: ");
+            String titulo = scanner.nextLine().trim();
+            System.out.print("Autor: ");
+            String autor = scanner.nextLine().trim();
+            System.out.print("Editorial: ");
+            String editorial = scanner.nextLine().trim();
+            System.out.print("Año de publicación: ");
+            int anio = Integer.parseInt(scanner.nextLine().trim());
+            System.out.print("Categoría (LITERATURA, CIENCIA, HISTORIA, TECNOLOGIA): ");
+            Categoria categoria = Categoria.valueOf(scanner.nextLine().trim().toUpperCase());
+
+            Libro libro = new Libro(id, titulo, autor, editorial, anio, categoria);
+            biblioteca.registrarLibro(libro);
+            System.out.println("Libro registrado correctamente.");
+        } catch (NumberFormatException e) {
+            System.out.println("El año debe ser un número válido.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Categoría inválida. Usa: LITERATURA, CIENCIA, HISTORIA o TECNOLOGIA.");
+        }
+    }
+
+    private static void listarLibrosDesdeConsola() {
+        List<Libro> disponibles = biblioteca.listarLibrosDisponibles();
+        if (disponibles.isEmpty()) {
+            System.out.println("No hay libros disponibles.");
+            return;
+        }
+        System.out.println("--- Libros disponibles ---");
+        for (Libro libro : disponibles) {
+            System.out.println(libro);
+        }
     }
 
     // Clientes
