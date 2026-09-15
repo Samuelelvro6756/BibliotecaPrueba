@@ -1,6 +1,7 @@
 package com.eam.biblioteca.core;
 
 import com.eam.biblioteca.model.Cliente;
+import com.eam.biblioteca.model.EstadoLibro;
 import com.eam.biblioteca.model.Libro;
 
 import java.util.ArrayList;
@@ -67,6 +68,12 @@ public class Biblioteca {
         if (libro == null){
             System.out.println("No existe un libro con eL ID "+idLibro);
         }
+        if (libro.getEstado() != EstadoLibro.DISPONIBLE){
+            System.out.println("El libro "+libro.getTitulo()+" no se encuentra disponible o ya fue prestado");
+        return false;
+        }
+        
+
         return false;
     }
 
