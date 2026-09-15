@@ -36,7 +36,18 @@ public class Biblioteca {
 
     /** TODO: agregar un cliente nuevo a la lista de clientes. */
     public void registrarCliente(Cliente cliente) {
-        // TODO: implementar
+    if (cliente == null){
+        System.out.println("el cliente no puede estar vacio");
+    }
+    boolean existe = clientes.stream()
+            .anyMatch(c->c.getDocumento().equals(cliente.getDocumento()));
+    if (existe){
+        System.out.println("Error: ya existe un cliente con el documento"+ cliente.getDocumento());
+        return;
+    }
+    clientes.add(cliente);
+    System.out.println("Cliente: "+cliente.getNombreCompleto()+" fue registrado exitosamente");
+
     }
 
     // ---------- Lógica compartida (préstamos/devoluciones) ----------
