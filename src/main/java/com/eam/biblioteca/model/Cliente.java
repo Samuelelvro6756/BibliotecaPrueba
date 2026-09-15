@@ -48,7 +48,10 @@ public class Cliente {
      */
     @Override
     public String toString() {
-        // TODO: implementar
-        return "";
+        return "Documento: " + documento +
+                "\nNombre: " + nombreCompleto +
+                "\nTeléfono: " + telefono +
+                "\nDirección: " + direccion +
+                "\nPréstamo activo: " + (tienePrestamoActivo ? "Sí" : "No");
     }
 }
