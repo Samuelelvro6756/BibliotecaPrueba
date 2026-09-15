@@ -52,4 +52,8 @@ public class Libro {
         // TODO: implementar
         return "";
     }
+
+    public void setEstado(EstadoLibro estado) {
+        this.estado = estado;
+    }
 }
