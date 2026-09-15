@@ -59,7 +59,14 @@ public class Biblioteca {
      * marcar al cliente, guardar la fecha).
      */
     public boolean prestarLibro(String idLibro, String documentoCliente) {
-        // TODO: implementar
+        Libro libro = libros.stream()
+                .filter(l->l.getId().equals(idLibro))
+                .findFirst()
+                .orElse(null);
+
+        if (libro == null){
+            System.out.println("No existe un libro con eL ID "+idLibro);
+        }
         return false;
     }
 
