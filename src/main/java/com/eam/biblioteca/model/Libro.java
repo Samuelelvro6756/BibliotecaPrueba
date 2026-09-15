@@ -30,12 +30,13 @@ public class Libro {
     public EstadoLibro getEstado() { return estado; }
 
     public void cambiarEstado(EstadoLibro nuevoEstado) {
-        // TODO: implementar
+        this.estado = nuevoEstado;
     }
 
     @Override
     public String toString() {
-        // TODO: implementar
-        return "";
+        return "ID: " + id + " | Título: " + titulo +
+                " | Autor: " + autor + " | Editorial: " + editorial +
+                " | Año: " + anioPublicacion + " | Categoría: " + categoria + " | Estado: " + estado;
     }
 }
