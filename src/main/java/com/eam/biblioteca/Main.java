@@ -25,7 +25,7 @@ public class Main {
     }
 
     private static void mostrarMenuPrincipal() {
-        System.out.println("\n===== BIBLIOTECA LIBROSYMAS =====");
+        System.out.println("\n===== BIBLIOTECA LIBROS Y MAS =====");
         System.out.println("1. Gestión de libros");
         System.out.println("2. Gestión de clientes y préstamos");
         System.out.println("0. Salir");
