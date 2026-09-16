@@ -1,9 +1,5 @@
 package com.eam.biblioteca.model;
 
-/**
- * Representa un ejemplar dentro del inventario de la biblioteca.
- * Responsable: Persona 1 (Inventario).
- */
 public class Libro {
 
     private String id;
@@ -14,8 +10,7 @@ public class Libro {
     private Categoria categoria;
     private EstadoLibro estado;
 
-    public Libro(String id, String titulo, String autor, String editorial,
-                 int anioPublicacion, Categoria categoria) {
+    public Libro(String id, String titulo, String autor, String editorial,int anioPublicacion, Categoria categoria) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -34,23 +29,15 @@ public class Libro {
     public Categoria getCategoria() { return categoria; }
     public EstadoLibro getEstado() { return estado; }
 
-    /**
-     * TODO (Persona 1): cambiar el estado del libro (ej. a PRESTADO,
-     * DISPONIBLE o RETIRADO).
-     */
     public void cambiarEstado(EstadoLibro nuevoEstado) {
-        // TODO: implementar
+        this.estado = nuevoEstado;
     }
 
-    /**
-     * TODO (Persona 1): retornar toda la información del libro
-     * en formato de texto (id, título, autor, editorial, año,
-     * categoría y estado).
-     */
     @Override
     public String toString() {
-        // TODO: implementar
-        return "";
+        return "ID: " + id + " | Título: " + titulo +
+                " | Autor: " + autor + " | Editorial: " + editorial +
+                " | Año: " + anioPublicacion + " | Categoría: " + categoria + " | Estado: " + estado;
     }
 
     public void setEstado(EstadoLibro estado) {
