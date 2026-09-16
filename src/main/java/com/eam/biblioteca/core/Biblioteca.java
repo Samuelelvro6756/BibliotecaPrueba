@@ -93,8 +93,6 @@ public class Biblioteca {
 
         System.out.println("Préstamo realizado: '" + libro.getId() + "' a " + cliente.getNombreCompleto());
         return true;
-
-        return false;
     }
 
     /**
