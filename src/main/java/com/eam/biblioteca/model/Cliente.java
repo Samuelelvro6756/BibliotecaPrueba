@@ -23,25 +23,14 @@ public class Cliente {
     public String getDireccion() { return direccion; }
     public boolean isTienePrestamoActivo() { return tienePrestamoActivo; }
 
-    /**
-     * TODO (Persona 2): marcar que el cliente recibió un libro en préstamo.
-     */
     public void marcarPrestamo() {
         this.tienePrestamoActivo=true;
     }
 
-    /**
-     * TODO (Persona 2): marcar que el cliente devolvió su libro
-     * (queda libre para pedir otro).
-     */
     public void marcarDevolucion() {
         this.tienePrestamoActivo=false;
     }
 
-    /**
-     * TODO (Persona 2): retornar toda la información del cliente
-     * en formato de texto.
-     */
     @Override
     public String toString() {
         return "Documento: " + documento +
