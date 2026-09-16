@@ -73,7 +73,7 @@ public class Biblioteca {
      * TODO: validar que el libro exista y esté PRESTADO. Si es así,
      * volverlo DISPONIBLE y liberar al cliente asociado.
      */
-    public boolean devolverLibro(String idLibro) {
+    public boolean devolverLibro(String idLibro, String documentoCliente) {
         // TODO: implementar
         return false;
     }

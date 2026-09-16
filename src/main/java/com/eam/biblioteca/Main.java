@@ -98,5 +98,72 @@ public class Main {
 
     // Clientes
     private static void mostrarMenuClientes() {
+        int opcion;
+        do {
+            System.out.println("\n----- GESTIÓN DE CLIENTES Y PRÉSTAMOS -----");
+            System.out.println("1. Registrar cliente");
+            System.out.println("2. Prestar libro");
+            System.out.println("3. Devolver libro");
+            System.out.println("0. Volver al menú principal");
+            System.out.print("Elige una opción: ");
+
+            opcion = leerOpcion();
+
+            switch (opcion) {
+                case 1 -> registrarClienteDesdeMenu();
+                case 2 -> prestarLibroDesdeMenu();
+                case 3 -> devolverLibroDesdeMenu();
+                case 0 -> System.out.println("Volviendo al menú principal...");
+                default -> System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
+    }
+    private static void registrarClienteDesdeMenu() {
+        System.out.print("Documento: ");
+        String documento = scanner.nextLine().trim();
+
+        System.out.print("Nombre completo: ");
+        String nombreCompleto = scanner.nextLine().trim();
+
+        System.out.print("Teléfono: ");
+        String telefono = scanner.nextLine().trim();
+
+        System.out.print("Dirección: ");
+        String direccion = scanner.nextLine().trim();
+
+        Cliente cliente = new Cliente(documento, nombreCompleto, telefono, direccion);
+        biblioteca.registrarCliente(cliente);
+    }
+
+    private static void prestarLibroDesdeMenu() {
+        System.out.print("ID del libro: ");
+        String idLibro = scanner.nextLine().trim();
+
+        System.out.print("Documento del cliente: ");
+        String documentoCliente = scanner.nextLine().trim();
+
+        boolean exito = biblioteca.prestarLibro(idLibro, documentoCliente);
+
+        if (exito) {
+            System.out.println("Préstamo registrado correctamente.");
+        } else {
+            System.out.println("No se pudo registrar el préstamo.");
+        }
+    }
+
+    private static void devolverLibroDesdeMenu() {
+        System.out.print("ID del libro: ");
+        String idLibro = scanner.nextLine().trim();
+
+        System.out.print("Documento del cliente: ");
+        String documentoCliente = scanner.nextLine().trim();
+
+        boolean exito = biblioteca.devolverLibro(idLibro, documentoCliente);
+
+        if (exito) {
+            System.out.println("Devolución registrada correctamente.");
+        } else {
+            System.out.println("No se pudo registrar la devolución.");
+        }
     }
 }
