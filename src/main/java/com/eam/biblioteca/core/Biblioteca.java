@@ -60,39 +60,7 @@ public class Biblioteca {
      * marcar al cliente, guardar la fecha).
      */
     public boolean prestarLibro(String idLibro, String documentoCliente) {
-        Libro libro = libros.stream()
-                .filter(l->l.getId().equals(idLibro))
-                .findFirst()
-                .orElse(null);
-
-        if (libro == null){
-            System.out.println("No existe un libro con eL ID "+idLibro);
-        }
-        if (libro.getEstado() != EstadoLibro.DISPONIBLE){
-            System.out.println("El libro "+libro.getTitulo()+" no se encuentra disponible o ya fue prestado");
         return false;
-        }
-        Cliente cliente = clientes.stream()
-                .filter(c -> c.getDocumento().equals(documentoCliente))
-                .findFirst()
-                .orElse(null);
-
-        if (cliente == null) {
-            System.out.println("Error: no existe un cliente con documento " + documentoCliente);
-            return false;
-        }
-
-        if (cliente.isTienePrestamoActivo()) {
-            System.out.println("Error: el cliente ya tiene un préstamo activo.");
-            return false;
-        }
-
-        // Actualizar estados
-        libro.setEstado(EstadoLibro.PRESTADO);
-        cliente.marcarPrestamo();
-
-        System.out.println("Préstamo realizado: '" + libro.getId() + "' a " + cliente.getNombreCompleto());
-        return true;
     }
 
     /**
