@@ -16,7 +16,6 @@ public class Cliente {
         this.tienePrestamoActivo = false;
     }
 
-    // ---------- Getters ----------
     public String getDocumento() { return documento; }
     public String getNombreCompleto() { return nombreCompleto; }
     public String getTelefono() { return telefono; }

@@ -16,7 +16,7 @@ public class Main {
             mostrarMenuPrincipal();
             opcion = leerOpcion();
             switch (opcion) {
-                case 1 -> mostrarMenuLibros();    // Persona 1
+                case 1 -> mostrarMenuLibros();
                 case 2 -> mostrarMenuClientes();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción inválida.");

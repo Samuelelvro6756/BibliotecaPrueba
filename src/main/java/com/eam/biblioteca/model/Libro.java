@@ -17,10 +17,9 @@ public class Libro {
         this.editorial = editorial;
         this.anioPublicacion = anioPublicacion;
         this.categoria = categoria;
-        this.estado = EstadoLibro.DISPONIBLE; // todo libro nuevo inicia disponible
+        this.estado = EstadoLibro.DISPONIBLE;
     }
 
-    // ---------- Getters ----------
     public String getId() { return id; }
     public String getTitulo() { return titulo; }
     public String getAutor() { return autor; }
@@ -33,7 +32,6 @@ public class Libro {
         this.estado = nuevoEstado;
     }
 
-    @Override
     public String toString() {
         return "ID: " + id + " | Título: " + titulo +
                 " | Autor: " + autor + " | Editorial: " + editorial +
