@@ -14,3 +14,6 @@ bin/
 
 # Sistema
 .DS_Store
+
+# Datos de la aplicación
+data/*.csv
