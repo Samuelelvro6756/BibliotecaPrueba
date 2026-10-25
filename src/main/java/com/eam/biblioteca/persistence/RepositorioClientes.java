@@ -17,7 +17,7 @@ public class RepositorioClientes {
 
     private Path ruta() {
         return Paths.get(Configuracion.DIRECTORIO_DATOS, ARCHIVO);
-
+    }
         public void guardar(List<Cliente> clientes) {
             List<String> lineas = new ArrayList<>();
             lineas.add(ENCABEZADO);

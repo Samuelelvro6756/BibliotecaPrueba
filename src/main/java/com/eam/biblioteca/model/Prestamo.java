@@ -1,6 +1,7 @@
 package com.eam.biblioteca.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Prestamo {
 
@@ -38,11 +39,22 @@ public class Prestamo {
         this.fechaDevolucion = fecha;
     }
 
+    public long getDiasRetraso() {
+        LocalDate referencia = (fechaDevolucion != null) ? fechaDevolucion : LocalDate.now();
+        long dias = ChronoUnit.DAYS.between(fechaLimite, referencia);
+        return Math.max(dias, 0);
+    }
+
     public String toString() {
-        return "Libro: " + idLibro +
+        String texto = "Libro: " + idLibro +
                 " | Cliente: " + documentoCliente +
                 " | Prestado: " + fechaPrestamo +
                 " | Límite: " + fechaLimite +
                 " | Devuelto: " + (fechaDevolucion == null ? "pendiente" : fechaDevolucion);
+        long retraso = getDiasRetraso();
+        if (retraso > 0) {
+            texto += " | Retraso: " + retraso + " día(s)";
+        }
+        return texto;
     }
 }

@@ -3,6 +3,11 @@ package com.eam.biblioteca.core;
 import com.eam.biblioteca.model.Cliente;
 import com.eam.biblioteca.model.EstadoLibro;
 import com.eam.biblioteca.model.Libro;
+import com.eam.biblioteca.model.Prestamo;
+import com.eam.biblioteca.persistence.RepositorioClientes;
+import com.eam.biblioteca.persistence.RepositorioLibros;
+import com.eam.biblioteca.persistence.RepositorioPrestamos;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +17,16 @@ public class Biblioteca {
 
     private List<Libro> libros = new ArrayList<>();
     private List<Cliente> clientes = new ArrayList<>();
+    private List<Prestamo> historialPrestamos = new ArrayList<>();
 
     private Map<String, String> prestamosActivos = new HashMap<>();
+    private final RepositorioLibros repositorioLibros = new RepositorioLibros();
+    private final RepositorioClientes repositorioClientes = new RepositorioClientes();
+    private final RepositorioPrestamos repositorioPrestamos = new RepositorioPrestamos();
+
+    public Biblioteca(){
+        cargarDatos();
+    }
 
     public void registrarLibro(Libro libro) {
         if (buscarLibroPorId(libro.getId()) != null) {
@@ -65,6 +78,9 @@ public class Biblioteca {
         }
         return null;
     }
+    public Cliente obtenerCliente(String documento) {
+        return buscarClientePorDocumento(documento);
+    }
 
     public boolean prestarLibro(String idLibro, String documentoCliente) {
         Libro libro = buscarLibroPorId(idLibro);
@@ -89,13 +105,22 @@ public class Biblioteca {
             return false;
         }
 
+        LocalDate hoy = LocalDate.now();
+        Prestamo prestamo = new Prestamo(idLibro, documentoCliente, hoy, hoy.plusDays(Configuracion.DIAS_PRESTAMO));
+        historialPrestamos.add(prestamo);
+
         libro.cambiarEstado(EstadoLibro.PRESTADO);
         cliente.marcarPrestamo();
         prestamosActivos.put(idLibro, documentoCliente);
+        System.out.println("Fecha límite de devolución: " + prestamo.getFechaLimite());
+        guardarDatos();
         return true;
     }
-
     public boolean devolverLibro(String idLibro, String documentoCliente) {
+        return devolverLibro(idLibro, documentoCliente, LocalDate.now());
+    }
+
+    public boolean devolverLibro(String idLibro, String documentoCliente, LocalDate fechaDevolucion) {
         Libro libro = buscarLibroPorId(idLibro);
         if (libro == null) {
             System.out.println("Error: no existe un libro con el id " + idLibro);
@@ -113,13 +138,95 @@ public class Biblioteca {
             return false;
         }
 
+        Prestamo prestamo = buscarPrestamoActivo(idLibro);
+        if (prestamo == null) {
+            System.out.println("Error: no se encontró el registro del préstamo de este libro.");
+            return false;
+        }
+
+        if (fechaDevolucion.isBefore(prestamo.getFechaPrestamo())) {
+            System.out.println("Error: la fecha de devolución no puede ser anterior a la fecha del préstamo ("
+                    + prestamo.getFechaPrestamo() + ").");
+            return false;
+        }
+
         Cliente cliente = buscarClientePorDocumento(documentoCliente);
+
+        prestamo.registrarDevolucion(fechaDevolucion);
+        long diasRetraso = prestamo.getDiasRetraso();
+        if (diasRetraso > 0) {
+            double multa = diasRetraso * Configuracion.MULTA_POR_DIA;
+            if (cliente != null) {
+                cliente.agregarMulta(multa);
+            }
+            System.out.println("El libro se devolvió con " + diasRetraso + " día(s) de retraso. "
+                    + "Multa generada: $" + String.format("%.0f", multa));
+        }
+
         if (cliente != null) {
             cliente.marcarDevolucion();
         }
 
         libro.cambiarEstado(EstadoLibro.DISPONIBLE);
         prestamosActivos.remove(idLibro);
+        guardarDatos();
         return true;
+    }
+    private Prestamo buscarPrestamoActivo(String idLibro) {
+        for (Prestamo p : historialPrestamos) {
+            if (p.getIdLibro().equals(idLibro) && p.isActivo()) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    //Historial
+
+    public List<Prestamo> obtenerHistorial() {
+        return new ArrayList<>(historialPrestamos);
+    }
+
+    public List<Prestamo> obtenerHistorialCliente(String documentoCliente) {
+        List<Prestamo> resultado = new ArrayList<>();
+        for (Prestamo p : historialPrestamos) {
+            if (p.getDocumentoCliente().equals(documentoCliente)) {
+                resultado.add(p);
+            }
+        }
+        return resultado;
+    }
+
+    //Persistencia
+
+    private void cargarDatos() {
+        libros = new ArrayList<>(repositorioLibros.cargar());
+        clientes = new ArrayList<>(repositorioClientes.cargar());
+        historialPrestamos = new ArrayList<>(repositorioPrestamos.cargar());
+        reconstruirPrestamosActivos();
+    }
+    // Restablecer el estado de libros y clientes a partir de los préstamos que siguen activos.
+    private void reconstruirPrestamosActivos() {
+        for (Prestamo p : historialPrestamos) {
+            if (!p.isActivo()) {
+                continue;
+            }
+            Libro libro = buscarLibroPorId(p.getIdLibro());
+            Cliente cliente = buscarClientePorDocumento(p.getDocumentoCliente());
+            if (libro == null || cliente == null) {
+                System.out.println("Aviso: el préstamo activo del libro " + p.getIdLibro()
+                        + " no se pudo asociar (libro o cliente no encontrado).");
+                continue;
+            }
+            libro.cambiarEstado(EstadoLibro.PRESTADO);
+            cliente.marcarPrestamo();
+            prestamosActivos.put(p.getIdLibro(), p.getDocumentoCliente());
+        }
+    }
+
+    private void guardarDatos() {
+        repositorioLibros.guardar(libros);
+        repositorioClientes.guardar(clientes);
+        repositorioPrestamos.guardar(historialPrestamos);
     }
 }
