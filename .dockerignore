@@ -1,0 +1,11 @@
+.git/
+.gitignore
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+bin/
+out/
+data/*.csv
+README.md

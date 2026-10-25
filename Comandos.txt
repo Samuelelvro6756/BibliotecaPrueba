@@ -1,0 +1,2 @@
+docker build -t biblioteca-libros-y-mas .
+docker run -it --rm -v biblioteca-data:/app/data biblioteca-libros-y-mas
