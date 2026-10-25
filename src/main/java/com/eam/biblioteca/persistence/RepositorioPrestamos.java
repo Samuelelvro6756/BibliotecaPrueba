@@ -1,5 +1,6 @@
 package com.eam.biblioteca.persistence;
 
+import com.eam.biblioteca.core.Configuracion;
 import com.eam.biblioteca.model.Prestamo;
 import java.util.ArrayList;
 import java.util.List;
