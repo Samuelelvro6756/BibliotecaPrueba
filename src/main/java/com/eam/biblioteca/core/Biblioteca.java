@@ -1,6 +1,7 @@
 package com.eam.biblioteca.core;
 
 import com.eam.biblioteca.model.Cliente;
+import com.eam.biblioteca.persistence.RepositorioLibros;
 import com.eam.biblioteca.model.EstadoLibro;
 import com.eam.biblioteca.model.Libro;
 import java.util.ArrayList;
@@ -14,32 +15,10 @@ public class Biblioteca {
     private List<Cliente> clientes = new ArrayList<>();
 
     private Map<String, String> prestamosActivos = new HashMap<>();
+    private RepositorioLibros repoLibros = new RepositorioLibros();
 
-    public void registrarLibro(Libro libro) {
-        if (buscarLibroPorId(libro.getId()) != null) {
-            System.out.println("Ya existe un libro registrado con el id " + libro.getId());
-            return;
-        }
-        libros.add(libro);
-    }
-
-    public List<Libro> listarLibrosDisponibles() {
-        List<Libro> disponibles = new ArrayList<>();
-        for (Libro libro : libros) {
-            if (libro.getEstado() == EstadoLibro.DISPONIBLE) {
-                disponibles.add(libro);
-            }
-        }
-        return disponibles;
-    }
-    
-    private Libro buscarLibroPorId(String id) {
-        for (Libro libro : libros) {
-            if (libro.getId().equals(id)) {
-                return libro;
-            }
-        }
-        return null;
+    public Biblioteca() {
+        libros = repoLibros.cargar();
     }
 
     public void registrarCliente(Cliente cliente) {
@@ -61,6 +40,38 @@ public class Biblioteca {
         for (Cliente cliente : clientes) {
             if (cliente.getDocumento().equals(documento)) {
                 return cliente;
+            }
+        }
+        return null;
+    }
+    
+    private void guardarLibros() {
+        repoLibros.guardar(libros);
+    }
+    
+    public void registrarLibro(Libro libro) {
+        if (buscarLibroPorId(libro.getId()) != null) {
+            System.out.println("Ya existe un libro registrado con el id " + libro.getId());
+            return;
+        }
+        libros.add(libro);
+        guardarLibros();
+    }
+
+    public List<Libro> listarLibrosDisponibles() {
+        List<Libro> disponibles = new ArrayList<>();
+        for (Libro libro : libros) {
+            if (libro.getEstado() == EstadoLibro.DISPONIBLE) {
+                disponibles.add(libro);
+            }
+        }
+        return disponibles;
+    }
+    
+    private Libro buscarLibroPorId(String id) {
+        for (Libro libro : libros) {
+            if (libro.getId().equals(id)) {
+                return libro;
             }
         }
         return null;
@@ -95,6 +106,7 @@ public class Biblioteca {
         }
 
         libro.agregarReserva(documentoCliente);
+        guardarLibros();
         return true;
     }
     
@@ -151,6 +163,7 @@ public class Biblioteca {
             libro.quitarPrimeraReserva();
         }
         
+        guardarLibros();
         return true;
     }
 
@@ -188,6 +201,7 @@ public class Biblioteca {
                     + nombre + " (documento " + documentoSiguiente + ")");
         }
         
+        guardarLibros();
         return true;
     }
 }
