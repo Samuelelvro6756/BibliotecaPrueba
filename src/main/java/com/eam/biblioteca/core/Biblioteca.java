@@ -270,7 +270,73 @@ public class Biblioteca {
         }
         return resultado;
     }
+    
+    // Reporte
+    public String generarReporte() {
+        long activos = 0;
+        long historicos = 0;
+        Map<String, Integer> prestamosPorCliente = new HashMap<>();
+        Map<String, Integer> prestamosPorLibro = new HashMap<>();
 
+        for (Prestamo p : historialPrestamos) {
+            if (p.isActivo()) {
+                activos++;
+            } else {
+                historicos++;
+            }
+            prestamosPorCliente.merge(p.getDocumentoCliente(), 1, Integer::sum);
+            prestamosPorLibro.merge(p.getIdLibro(), 1, Integer::sum);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Total de libros: ").append(libros.size()).append("\n");
+        sb.append("Total de clientes: ").append(clientes.size()).append("\n");
+        sb.append("Préstamos activos: ").append(activos).append("\n");
+        sb.append("Préstamos históricos (devueltos): ").append(historicos).append("\n");
+        sb.append("Cliente con más préstamos: ").append(clientesConMasPrestamos(prestamosPorCliente)).append("\n");
+        sb.append("Libro menos solicitado: ").append(librosMenosSolicitados(prestamosPorLibro));
+        return sb.toString();
+    }
+
+    private String clientesConMasPrestamos(Map<String, Integer> conteo) {
+        int max = 0;
+        for (int n : conteo.values()) {
+            if (n > max) {
+                max = n;
+            }
+        }
+        if (max == 0) {
+            return "aún no hay préstamos registrados";
+        }
+        List<String> nombres = new ArrayList<>();
+        for (Cliente c : clientes) {
+            if (conteo.getOrDefault(c.getDocumento(), 0) == max) {
+                nombres.add(c.getNombreCompleto() + " (documento " + c.getDocumento() + ")");
+            }
+        }
+        return String.join(", ", nombres) + " con " + max + " préstamo(s)";
+    }
+
+    private String librosMenosSolicitados(Map<String, Integer> conteo) {
+        if (libros.isEmpty()) {
+            return "no hay libros registrados";
+        }
+        if (historialPrestamos.isEmpty()) {
+            return "aún no hay préstamos registrados";
+        }
+        int min = Integer.MAX_VALUE;
+        for (Libro l : libros) {
+            min = Math.min(min, conteo.getOrDefault(l.getId(), 0));
+        }
+        List<String> titulos = new ArrayList<>();
+        for (Libro l : libros) {
+            if (conteo.getOrDefault(l.getId(), 0) == min) {
+                titulos.add(l.getTitulo() + " (id " + l.getId() + ")");
+            }
+        }
+        return String.join(", ", titulos) + " con " + min + " préstamo(s)";
+    }
+    
     private void cargarDatos() {
         libros = new ArrayList<>(repositorioLibros.cargar());
         clientes = new ArrayList<>(repositorioClientes.cargar());

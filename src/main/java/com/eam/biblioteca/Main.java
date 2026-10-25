@@ -20,6 +20,7 @@ public class Main {
             switch (opcion) {
                 case 1 -> mostrarMenuLibros();
                 case 2 -> mostrarMenuClientes();
+                case 3 -> mostrarReporte();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción inválida.");
             }
@@ -30,6 +31,7 @@ public class Main {
         System.out.println("\n===== BIBLIOTECA LIBROS Y MAS =====");
         System.out.println("1. Gestión de libros");
         System.out.println("2. Gestión de clientes y préstamos");
+        System.out.println("3. Reporte general");
         System.out.println("0. Salir");
         System.out.print("Elige una opción: ");
     }
@@ -40,6 +42,11 @@ public class Main {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+    
+    private static void mostrarReporte() {
+        System.out.println("\n--- Reporte general ---");
+        System.out.println(biblioteca.generarReporte());
     }
 
     // Inventario
