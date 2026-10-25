@@ -47,12 +47,16 @@ public class Main {
             System.out.println("\n--- Gestión de libros ---");
             System.out.println("1. Registrar libro");
             System.out.println("2. Listar libros disponibles");
+            System.out.println("3. Reservar libro");
+            System.out.println("4. Consultar reservas de un libro");
             System.out.println("0. Volver");
             System.out.print("Elige una opción: ");
             opcion = leerOpcion();
             switch (opcion) {
                 case 1 -> registrarLibroDesdeConsola();
                 case 2 -> listarLibrosDesdeConsola();
+                case 3 -> reservarLibroDesdeConsola();
+                case 4 -> consultarReservasDesdeConsola();
                 case 0 -> System.out.println("Volviendo al menú principal...");
                 default -> System.out.println("Opción inválida.");
             }
@@ -93,6 +97,42 @@ public class Main {
         System.out.println("--- Libros disponibles ---");
         for (Libro libro : disponibles) {
             System.out.println(libro);
+        }
+    }
+    
+    private static void reservarLibroDesdeConsola() {
+        System.out.print("ID del libro: ");
+        String idLibro = scanner.nextLine().trim();
+
+        System.out.print("Documento del cliente: ");
+        String documento = scanner.nextLine().trim();
+
+        if (biblioteca.reservarLibro(idLibro, documento)) {
+            System.out.println("Reserva registrada correctamente.");
+        } else {
+            System.out.println("No se pudo registrar la reserva.");
+        }
+    }
+
+    private static void consultarReservasDesdeConsola() {
+        System.out.print("ID del libro: ");
+        String idLibro = scanner.nextLine().trim();
+
+        List<Cliente> reservas = biblioteca.consultarReservas(idLibro);
+        if (reservas == null) {
+            return;
+        }
+        if (reservas.isEmpty()) {
+            System.out.println("El libro no tiene reservas.");
+            return;
+        }
+
+        System.out.println("--- Cola de reservas ---");
+        int posicion = 1;
+        for (Cliente cliente : reservas) {
+            System.out.println(posicion + ". " + cliente.getNombreCompleto()
+                    + " (documento " + cliente.getDocumento() + ")");
+            posicion++;
         }
     }
 

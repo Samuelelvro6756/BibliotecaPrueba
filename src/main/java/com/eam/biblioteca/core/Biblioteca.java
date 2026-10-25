@@ -65,6 +65,55 @@ public class Biblioteca {
         }
         return null;
     }
+    
+    public boolean reservarLibro(String idLibro, String documentoCliente) {
+        Libro libro = buscarLibroPorId(idLibro);
+        if (libro == null) {
+            System.out.println("Error: no existe un libro con el id " + idLibro);
+            return false;
+        }
+
+        Cliente cliente = buscarClientePorDocumento(documentoCliente);
+        if (cliente == null) {
+            System.out.println("Error: no existe un cliente con el documento " + documentoCliente);
+            return false;
+        }
+
+        if (libro.getEstado() != EstadoLibro.PRESTADO) {
+            System.out.println("Error: solo se pueden reservar libros que estén prestados.");
+            return false;
+        }
+
+        if (documentoCliente.equals(prestamosActivos.get(idLibro))) {
+            System.out.println("Error: el cliente ya tiene este libro en préstamo.");
+            return false;
+        }
+
+        if (libro.getReservas().contains(documentoCliente)) {
+            System.out.println("Error: el cliente ya reservó este libro.");
+            return false;
+        }
+
+        libro.agregarReserva(documentoCliente);
+        return true;
+    }
+    
+    public List<Cliente> consultarReservas(String idLibro) {
+        Libro libro = buscarLibroPorId(idLibro);
+        if (libro == null) {
+            System.out.println("Error: no existe un libro con el id " + idLibro);
+            return null;
+        }
+
+        List<Cliente> cola = new ArrayList<>();
+        for (String documento : libro.getReservas()) {
+            Cliente cliente = buscarClientePorDocumento(documento);
+            if (cliente != null) {
+                cola.add(cliente);
+            }
+        }
+        return cola;
+    }
 
     public boolean prestarLibro(String idLibro, String documentoCliente) {
         Libro libro = buscarLibroPorId(idLibro);
@@ -88,10 +137,20 @@ public class Biblioteca {
             System.out.println("Error: el cliente " + cliente.getNombreCompleto() + " ya tiene un préstamo activo.");
             return false;
         }
+        
+        if (libro.tieneReservas() && !documentoCliente.equals(libro.siguienteEnCola())) {
+            System.out.println("Error: el libro está reservado para otro cliente que va primero en la cola.");
+            return false;
+        }
 
         libro.cambiarEstado(EstadoLibro.PRESTADO);
         cliente.marcarPrestamo();
         prestamosActivos.put(idLibro, documentoCliente);
+        
+        if (libro.tieneReservas()) {
+            libro.quitarPrimeraReserva();
+        }
+        
         return true;
     }
 
@@ -120,6 +179,15 @@ public class Biblioteca {
 
         libro.cambiarEstado(EstadoLibro.DISPONIBLE);
         prestamosActivos.remove(idLibro);
+        
+        if (libro.tieneReservas()) {
+            String documentoSiguiente = libro.siguienteEnCola();
+            Cliente siguiente = buscarClientePorDocumento(documentoSiguiente);
+            String nombre = (siguiente != null) ? siguiente.getNombreCompleto() : documentoSiguiente;
+            System.out.println("Aviso: este libro tiene reservas. Sigue en la cola: "
+                    + nombre + " (documento " + documentoSiguiente + ")");
+        }
+        
         return true;
     }
 }
