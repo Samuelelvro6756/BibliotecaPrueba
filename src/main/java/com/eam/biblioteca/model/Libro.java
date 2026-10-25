@@ -1,4 +1,6 @@
 package com.eam.biblioteca.model;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Libro {
 
@@ -9,6 +11,7 @@ public class Libro {
     private int anioPublicacion;
     private Categoria categoria;
     private EstadoLibro estado;
+    private List<String> reservas = new ArrayList<>();
 
     public Libro(String id, String titulo, String autor, String editorial,int anioPublicacion, Categoria categoria) {
         this.id = id;
@@ -40,5 +43,26 @@ public class Libro {
 
     public void setEstado(EstadoLibro estado) {
         this.estado = estado;
+    }
+    public void agregarReserva(String documento) {
+        reservas.add(documento);
+    }
+
+    public List<String> getReservas() {
+        return new ArrayList<>(reservas);
+    }
+
+    public boolean tieneReservas() {
+        return !reservas.isEmpty();
+    }
+
+    public String siguienteEnCola() {
+        return reservas.isEmpty() ? null : reservas.get(0);
+    }
+
+    public void quitarPrimeraReserva() {
+        if (!reservas.isEmpty()) {
+            reservas.remove(0);
+        }
     }
 }
